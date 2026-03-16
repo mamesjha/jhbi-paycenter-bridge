@@ -1,5 +1,5 @@
 {
-  "_comment": "Example Zelle payment event payload – COMPLETED status. Based on Early Warning Services (EWS) Zelle API schema. Field names to be confirmed with JH PayCenter integration team (see Appendix A). NOTE: tokenValue, displayName, and memo are PII and are stripped by the bridge before publishing to Pub/Sub.",
+  "_comment": "Example Zelle payment event payload – COMPLETED status. Based on Early Warning Services (EWS) Zelle API schema. Field names to be confirmed with JH PayCenter integration team (see Appendix A). NOTE: tokenValue, displayName, and memo contain PII and must be tokenized by the bridge before publishing to Pub/Sub.",
   "zelleTransactionId": "ZL-20260316-8A3F91C2",
   "ewsTransactionId": "EWS-2026031600014872",
   "institutionTransactionId": "FI-TXN-00293847",
@@ -19,6 +19,8 @@
     "institutionName": "First National Bank",
     "accountToken": "ACT-83920193",
     "tokenType": "EMAIL",
+    "tokenValue": "john.smith@example.com",
+    "displayName": "John Smith",
     "routingNumber": "021000021"
   },
   "receiver": {
@@ -26,8 +28,11 @@
     "institutionName": "Sunrise Credit Union",
     "accountToken": "ACT-57291038",
     "tokenType": "PHONE",
+    "tokenValue": "+15550199234",
+    "displayName": "Maria Garcia",
     "routingNumber": "322271627"
   },
+  "memo": "Dinner last night",
   "fraudIndicators": {
     "riskScore": 12,
     "riskBand": "LOW",
