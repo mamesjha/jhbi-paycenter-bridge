@@ -2,7 +2,7 @@
 
 > **Python · Kafka → GCP Pub/Sub · Cloud Run · Terraform**
 
-A cloud-native bridge service that consumes real-time payment events from Jack Henry's Enterprise Event System (EES) and publishes them to a unified GCP Pub/Sub topic for downstream processing.
+A cloud-native bridge service that consumes raw real-time payment events from JH PayCenter and publishes them to a unified GCP Pub/Sub topic for downstream processing.
 
 ## Payment Rails Supported
 
@@ -15,7 +15,7 @@ A cloud-native bridge service that consumes real-time payment events from Jack H
 ## Architecture
 
 ```
-JH PayCenter EES  →  Kafka (Event 800)  →  Python Bridge (Cloud Run)  →  GCP Pub/Sub
+JH PayCenter  →  Kafka (raw events)  →  Python Bridge (Cloud Run)  →  GCP Pub/Sub
 ```
 
 ## Repository Structure
@@ -23,12 +23,16 @@ JH PayCenter EES  →  Kafka (Event 800)  →  Python Bridge (Cloud Run)  →  G
 ```
 epics/          # Epic-level descriptions and requirements
 stories/        # Individual user stories per epic
+docs/           # Design document, schemas, and integration notes
+  schemas/
+    paycenter/  # Draft PayCenter event schema examples (per rail)
 ```
 
 ## Epics
 
 | Epic | Title | Status |
 |------|-------|--------|
+| [EPIC-0](epics/EPIC-0-paycenter-infrastructure-discovery.md) | PayCenter Infrastructure Discovery | 🔴 Blocked – Requires JH Engagement |
 | [EPIC-1](epics/EPIC-1-kafka-consumer.md) | Kafka Consumer Service | 🔵 Backlog |
 | [EPIC-2](epics/EPIC-2-pubsub-integration.md) | GCP Pub/Sub Integration | 🔵 Backlog |
 | [EPIC-3](epics/EPIC-3-cloud-run-deployment.md) | Cloud Run Deployment | 🔵 Backlog |
@@ -49,15 +53,15 @@ stories/        # Individual user stories per epic
 
 ## Prerequisites
 
-Before development can begin on Epic 1 and Epic 2, the following must be resolved with the JH PayCenter integration team:
+**EPIC-0 must be completed before EPIC-1 or EPIC-2 development begins.** The following must be resolved with the JH PayCenter integration team:
 
-- Kafka broker hostname(s), port, and topic name for Event 800
+- Kafka broker hostname(s), port, and topic name(s) for raw PayCenter events
 - Authentication mechanism (SASL or mTLS) and credential provisioning process
-- Confirmation of Event 800 schema per rail type (Zelle, RTP, FedNow)
+- Confirmation of raw event schema per rail type (Zelle, RTP, FedNow)
 - Network connectivity path (public internet vs VPN/peering) from GCP to JH Kafka
 
-See [Appendix A of the design document](docs/design-document.md) for the full list of integration questions.
+See [Appendix A of the design document](docs/JHA_PayCenter_Bridge_Design_Document.docx) for the full list of integration questions.
 
 ---
 
-*Design Document:* `docs/JHA_PayCenter_Bridge_Design_Document.docx`
+*Design Document:* [docs/JHA_PayCenter_Bridge_Design_Document.docx](docs/JHA_PayCenter_Bridge_Design_Document.docx)

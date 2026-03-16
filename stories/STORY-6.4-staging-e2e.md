@@ -5,7 +5,7 @@
 
 ## User Story
 
-> As a platform engineer, I want a validated end-to-end test in the staging environment using real JH EES connectivity so that we confirm the full pipeline works before production cutover.
+> As a platform engineer, I want a validated end-to-end test in the staging environment using real JH PayCenter connectivity so that we confirm the full pipeline works before production cutover.
 
 ## Details
 
@@ -15,7 +15,7 @@ Pre-conditions:
 - JH integration team able to inject synthetic test events per rail type
 
 Test steps:
-1. JH team injects a synthetic Zelle Event 800 into the sandbox Kafka topic
+1. JH team injects a synthetic Zelle event into the sandbox Kafka topic
 2. Confirm message appears in `payment-events` Pub/Sub topic within 10 seconds
 3. Confirm message has correct `rail_type = ZELLE` attribute
 4. Repeat for RTP and FedNow
@@ -31,5 +31,5 @@ Test steps:
 
 ## Notes
 
-- Blocked on JH sandbox environment access (Appendix A Q17)
-- Requires coordination with JH integration team to inject test events
+- Blocked on EPIC-0 (STORY-0.3): requires connectivity to JH PayCenter sandbox environment
+- Requires coordination with JH integration team to inject test events (Appendix A Q17)

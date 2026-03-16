@@ -5,13 +5,13 @@
 
 ## User Story
 
-> As a platform engineer, I want the bridge service to securely authenticate to the JH EES Kafka cluster at startup so that we can consume payment events without storing credentials in the codebase.
+> As a platform engineer, I want the bridge service to securely authenticate to the JH PayCenter Kafka cluster at startup so that we can consume payment events without storing credentials in the codebase.
 
 ## Details
 
 - Use `confluent-kafka-python` (`confluent_kafka.Consumer`)
 - Auth config sourced from GCP Secret Manager (broker URL, username, password, SSL cert paths)
-- Support `SASL_SSL` with either `PLAIN` or `SCRAM-SHA-512` (to be confirmed with JH — see Appendix A Q7)
+- Support `SASL_SSL` with either `PLAIN` or `SCRAM-SHA-512` (to be confirmed with JH — see EPIC-0 / Appendix A Q7)
 - If mTLS is required, mount client cert and key from Secret Manager volume
 
 ## Acceptance Criteria
@@ -23,4 +23,4 @@
 
 ## Notes
 
-- Blocked on JH integration questions: broker hostname, port, auth mechanism (Appendix A Q6, Q7)
+- Blocked on EPIC-0 (PayCenter Infrastructure Discovery): broker hostname, port, auth mechanism (Appendix A Q6, Q7)

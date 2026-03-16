@@ -1,4 +1,4 @@
-# STORY-6.3 – Contract Tests for Event 800 Schema
+# STORY-6.3 – Contract Tests for PayCenter Event Schema
 
 **Epic:** [EPIC-6 – Testing & Quality Assurance](../epics/EPIC-6-testing.md)
 **Status:** 🔵 Backlog | **Points:** 3
@@ -9,12 +9,12 @@
 
 ## Details
 
-- Sample payloads provided by JH integration team (sanitised, per rail type and status)
-- Store payloads in `tests/fixtures/event800/` as `.json` files
-- Validate each fixture against the `Event800` Pydantic model
+- Sample payloads provided by JH integration team (sanitized, per rail type and status) — sourced from EPIC-0 / STORY-0.2
+- Store payloads in `tests/fixtures/paycenter/` as `.json` files
+- Validate each fixture against the `PayCenterEvent` Pydantic model (defined in STORY-0.4, lives in `src/models/paycenter.py`)
 - If JH provides a JSON Schema or Avro schema, validate against that too
 
-Test matrix (once JH provides samples):
+Test matrix (once JH provides samples via EPIC-0):
 
 | Fixture | Rail | Status |
 |---------|------|--------|
@@ -34,4 +34,5 @@ Test matrix (once JH provides samples):
 
 ## Notes
 
-- Blocked on JH providing sample payloads (Appendix A Q3)
+- Blocked on EPIC-0 (STORY-0.2): confirmed sample payloads needed from JH
+- Blocked on EPIC-0 (STORY-0.4): `PayCenterEvent` Pydantic model must be defined first

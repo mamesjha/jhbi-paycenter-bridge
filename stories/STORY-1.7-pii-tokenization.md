@@ -9,15 +9,17 @@
 
 ## Background
 
-The JH PayCenter EES Event 800 payload includes the following PII fields that must be tokenized before the message is forwarded:
+The JH PayCenter raw payment event payload includes PII fields that must be tokenized before the message is forwarded. Based on draft Zelle schema examples, the following fields are expected to contain PII — **exact field paths to be confirmed once EPIC-0 schemas are finalized**:
 
-| Field Path | PII Type |
-|------------|----------|
+| Field Path (Draft) | PII Type |
+|--------------------|----------|
 | `sender.tokenValue` | Phone number or email address |
 | `sender.displayName` | Person's full name |
 | `receiver.tokenValue` | Phone number or email address |
 | `receiver.displayName` | Person's full name |
 | `memo` | Free-text — may contain names, account numbers, or other sensitive content |
+
+> ⚠️ Field paths above are based on draft Zelle schema examples. They must be verified against confirmed PayCenter schemas from EPIC-0 before implementation.
 
 ## Tokenization Requirements
 
@@ -49,14 +51,15 @@ The specific tokenization library or service is to be decided. Candidate options
 
 ## Acceptance Criteria
 
-- [ ] All five PII field paths are tokenized before Pub/Sub publish
+- [ ] All confirmed PII field paths are tokenized before Pub/Sub publish
 - [ ] The same input value produces the same token on repeated runs (deterministic)
 - [ ] A tokenization failure routes the message to the dead letter topic with `error_type = TOKENIZATION_FAILURE`
 - [ ] No plain-text PII appears in any log output, metric label, or error message
-- [ ] Unit tests cover: successful tokenization of all five fields, tokenization failure routing, determinism assertion (same input → same token)
+- [ ] Unit tests cover: successful tokenization of all PII fields, tokenization failure routing, determinism assertion (same input → same token)
 - [ ] `TokenizerClient` is injectable (interface-based) so tests can run without a live vault
 
 ## Notes
 
 - Blocked on tokenization approach decision (architecture review required)
+- Blocked on confirmed PII field paths from EPIC-0
 - Dead letter messages contain pre-tokenization raw bytes — ensure DLT IAM is restricted (see EPIC-2, STORY-2.4)
