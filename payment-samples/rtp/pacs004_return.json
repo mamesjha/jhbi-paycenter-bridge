@@ -1,0 +1,128 @@
+{
+  "_metadata": {
+    "network": "RTP (The Clearing House)",
+    "message_type": "pacs.004.001.08",
+    "description": "Payment Return — RTP version of a payment reversal after settlement",
+    "schema_version": "ISO 20022 pacs.004.001.08",
+    "rtp_return_rules": [
+      "Returns must be initiated within 2 business days of original settlement",
+      "Only full returns supported (no partial returns via pacs.004)",
+      "Return itself is a new RTP payment in reverse — must clear full validation",
+      "The original creditor bank (now debtor for the return) must have sufficient balance"
+    ],
+    "return_reason_codes": {
+      "AC04": "Closed account number",
+      "AM09": "Wrong amount",
+      "CUST": "Customer request",
+      "DUPL": "Duplicate payment",
+      "FRAD": "Fraudulent origin — used for unauthorized/fraudulent transactions",
+      "MD06": "Refund request by end customer",
+      "NARR": "Narrative — free text reason"
+    }
+  },
+
+  "iso20022": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "122000247" },
+            "Nm": "Wells Fargo Bank, N.A."
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "026009593" },
+            "Nm": "Citibank, N.A."
+          }
+        }
+      },
+      "BizMsgIdr": "20250316WFB0000RTN001",
+      "MsgDefIdr": "pacs.004.001.08",
+      "BizSvc": "iso20022:xsd$pacs.004.001.08",
+      "CreDtTm": "2025-03-16T10:22:14.331Z"
+    },
+
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pacs.004.001.08",
+      "PmtRtr": {
+        "GrpHdr": {
+          "MsgId": "RTPRETURN20250316WFB000001",
+          "CreDtTm": "2025-03-16T10:22:14.331Z",
+          "NbOfTxs": "1",
+          "TtlRtrdIntrBkSttlmAmt": { "@Ccy": "USD", "#text": "3850.75" },
+          "IntrBkSttlmDt": "2025-03-16",
+          "SttlmInf": {
+            "SttlmMtd": "CLRG",
+            "ClrSys": { "Cd": "TCH" }
+          },
+          "InstgAgt": {
+            "FinInstnId": { "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "122000247" } }
+          },
+          "InstdAgt": {
+            "FinInstnId": { "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "026009593" } }
+          }
+        },
+        "TxInf": {
+          "RtrId": "RTPRET20250316WFB0000001",
+          "OrgnlGrpInf": {
+            "OrgnlMsgId": "RTP20250315CITI0000000555",
+            "OrgnlMsgNmId": "pacs.008.001.07",
+            "OrgnlCreDtTm": "2025-03-15T18:05:33.721Z"
+          },
+          "OrgnlInstrId": "CITI20250315INS0000555",
+          "OrgnlEndToEndId": "E2E-INVOICE-WFB-2025-0315",
+          "OrgnlTxId": "RTP20250315TXN000000555",
+          "OrgnlUETR": "f1e2d3c4-b5a6-7f8e-9d0c-b1a2c3d4e5f6",
+          "OrgnlIntrBkSttlmAmt": { "@Ccy": "USD", "#text": "3850.75" },
+          "OrgnlIntrBkSttlmDt": "2025-03-15",
+          "RtrdIntrBkSttlmAmt": { "@Ccy": "USD", "#text": "3850.75" },
+          "IntrBkSttlmDt": "2025-03-16",
+          "ChrgBr": "SLEV",
+          "RtrRsnInf": {
+            "Rsn": { "Cd": "DUPL" },
+            "AddtlInf": "Duplicate payment detected. Creditor confirmed receipt of two identical transfers for PCC-INV-2025-0115 on 2025-03-15. Returning duplicate credit."
+          },
+          "OrgnlTxRef": {
+            "IntrBkSttlmAmt": { "@Ccy": "USD", "#text": "3850.75" },
+            "IntrBkSttlmDt": "2025-03-15",
+            "Dbtr": { "Nm": "GlobalTech Solutions Inc" },
+            "DbtrAcct": { "Id": { "Othr": { "Id": "7654321098765432", "SchmeNm": { "Cd": "BBAN" } } } },
+            "DbtrAgt": { "FinInstnId": { "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "026009593" } } },
+            "CdtrAgt": { "FinInstnId": { "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "122000247" } } },
+            "Cdtr": { "Nm": "Pacific Coast Consulting LLC" },
+            "CdtrAcct": { "Id": { "Othr": { "Id": "1122334455667788", "SchmeNm": { "Cd": "BBAN" } } } }
+          }
+        }
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "RTP",
+    "message_type": "Payment Return",
+    "return_id": "RTPRET20250316WFB0000001",
+    "message_id": "RTPRETURN20250316WFB000001",
+    "created_at": "2025-03-16T10:22:14.331Z",
+    "return_settlement_date": "2025-03-16",
+    "return_amount": 3850.75,
+    "return_currency": "USD",
+    "return_reason_code": "DUPL",
+    "return_reason_description": "Duplicate payment",
+    "additional_info": "Two identical transfers received for invoice PCC-INV-2025-0115",
+    "original_payment": {
+      "transaction_id": "RTP20250315TXN000000555",
+      "uetr": "f1e2d3c4-b5a6-7f8e-9d0c-b1a2c3d4e5f6",
+      "amount": 3850.75,
+      "settlement_date": "2025-03-15"
+    },
+    "returning_bank": "Wells Fargo Bank, N.A.",
+    "funds_returning_to": {
+      "bank": "Citibank, N.A.",
+      "account_holder": "GlobalTech Solutions Inc",
+      "account_number": "7654321098765432"
+    }
+  }
+}

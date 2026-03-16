@@ -1,0 +1,150 @@
+{
+  "_metadata": {
+    "network": "FedNow",
+    "message_type": "pain.014.001.07",
+    "description": "Creditor Payment Activation Request Status Report — debtor bank response to an RfP (accept or reject)",
+    "schema_version": "ISO 20022 pain.014.001.07",
+    "status_codes": {
+      "ACCP": "Accepted — debtor approved, pacs.008 credit transfer will follow",
+      "RJCT": "Rejected — debtor declined the payment request"
+    },
+    "rejection_reason_codes": {
+      "AM04": "Insufficient funds",
+      "CUST": "Customer request — customer does not recognise or disputes the request",
+      "NOAS": "No answer from customer within the expiry window",
+      "AM02": "Not allowed amount — amount differs from agreed amount"
+    },
+    "notes": [
+      "pain.014 ACCP does NOT settle funds — it signals that a pacs.008 will follow",
+      "The pacs.008 that follows MUST reference the same EndToEndId from pain.013",
+      "pain.014 RJCT terminates the RfP lifecycle; creditor must reissue pain.013 if needed"
+    ]
+  },
+
+  "iso20022_acceptance": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "021000021" },
+            "Nm": "JPMorgan Chase Bank, N.A."
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "021000089" },
+            "Nm": "Bank of America, N.A."
+          }
+        }
+      },
+      "BizMsgIdr": "20250315JPMC0000RFP002",
+      "MsgDefIdr": "pain.014.001.07",
+      "BizSvc": "iso20022:xsd$pain.014.001.07",
+      "CreDtTm": "2025-03-15T11:45:30.000Z"
+    },
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pain.014.001.07",
+      "CdtrPmtActvtnReqStsRpt": {
+        "GrpHdr": {
+          "MsgId": "RFPSTS20250315JPMC0000001",
+          "CreDtTm": "2025-03-15T11:45:30.000Z",
+          "InitgPty": {
+            "Nm": "JPMorgan Chase Bank, N.A.",
+            "Id": { "OrgId": { "AnyBIC": "CHASUS33" } }
+          }
+        },
+        "OrgnlGrpInfAndSts": {
+          "OrgnlMsgId": "RFP20250315BOA0000001",
+          "OrgnlMsgNmId": "pain.013.001.07",
+          "OrgnlCreDtTm": "2025-03-15T09:00:00.000Z",
+          "OrgnlNbOfTxs": "1",
+          "OrgnlCtrlSum": "47500.00",
+          "GrpSts": "ACCP"
+        },
+        "OrgnlPmtInfAndSts": {
+          "OrgnlPmtInfId": "PMTINF20250315BOA0000001",
+          "PmtInfSts": "ACCP",
+          "TxInfAndSts": {
+            "StsId": "RFPSTS20250315JPMC00000001",
+            "OrgnlInstrId": "BOA20250315RFP0000001",
+            "OrgnlEndToEndId": "E2E-RFP-INV0892-2025",
+            "OrgnlUETR": "9b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+            "TxSts": "ACCP",
+            "AccptncDtTm": "2025-03-15T11:45:28.000Z",
+            "StsRsnInf": {
+              "AddtlInf": "Customer approved. Credit transfer will be initiated immediately."
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "iso20022_rejection": {
+    "_note": "Alternative pain.014 for a rejected RfP",
+    "AppHdr": {
+      "Fr": { "FIId": { "FinInstnId": { "ClrSysMmbId": { "MmbId": "021000021" } } } },
+      "To": { "FIId": { "FinInstnId": { "ClrSysMmbId": { "MmbId": "021000089" } } } },
+      "BizMsgIdr": "20250315JPMC0000RFP003",
+      "MsgDefIdr": "pain.014.001.07",
+      "CreDtTm": "2025-03-15T11:46:00.000Z"
+    },
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pain.014.001.07",
+      "CdtrPmtActvtnReqStsRpt": {
+        "GrpHdr": {
+          "MsgId": "RFPSTS20250315JPMC0000002",
+          "CreDtTm": "2025-03-15T11:46:00.000Z",
+          "InitgPty": { "Nm": "JPMorgan Chase Bank, N.A." }
+        },
+        "OrgnlGrpInfAndSts": {
+          "OrgnlMsgId": "RFP20250315BOA0000001",
+          "OrgnlMsgNmId": "pain.013.001.07",
+          "GrpSts": "RJCT"
+        },
+        "OrgnlPmtInfAndSts": {
+          "OrgnlPmtInfId": "PMTINF20250315BOA0000001",
+          "PmtInfSts": "RJCT",
+          "TxInfAndSts": {
+            "StsId": "RFPSTS20250315JPMC00000002",
+            "OrgnlEndToEndId": "E2E-RFP-INV0892-2025",
+            "OrgnlUETR": "9b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+            "TxSts": "RJCT",
+            "StsRsnInf": {
+              "Rsn": { "Cd": "CUST" },
+              "AddtlInf": "Customer disputes invoice amounts. Please contact Meridian Healthcare Corp accounts payable for resolution."
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "FedNow",
+    "message_type": "RfP Response (pain.014)",
+
+    "acceptance_response": {
+      "message_id": "RFPSTS20250315JPMC0000001",
+      "created_at": "2025-03-15T11:45:30.000Z",
+      "original_rfp_id": "RFP20250315BOA0000001",
+      "original_end_to_end_id": "E2E-RFP-INV0892-2025",
+      "original_uetr": "9b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+      "status": "ACCP",
+      "status_description": "Customer approved — credit transfer will follow",
+      "accepted_at": "2025-03-15T11:45:28.000Z",
+      "responding_bank": "JPMorgan Chase Bank, N.A."
+    },
+
+    "rejection_response": {
+      "message_id": "RFPSTS20250315JPMC0000002",
+      "original_rfp_id": "RFP20250315BOA0000001",
+      "status": "RJCT",
+      "reason_code": "CUST",
+      "reason_description": "Customer disputes invoice amounts",
+      "additional_info": "Please contact Meridian Healthcare Corp accounts payable"
+    }
+  }
+}

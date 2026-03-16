@@ -1,0 +1,337 @@
+{
+  "_metadata": {
+    "network": "FedNow",
+    "message_type": "pacs.008.001.08",
+    "description": "FI to FI Customer Credit Transfer — the core payment send message",
+    "schema_version": "ISO 20022 pacs.008.001.08 / head.001.001.03",
+    "use_case": "Payment system sends a credit transfer instruction from debtor bank to creditor bank via FedNow",
+    "settlement_method": "FDN (FedNow Service clearing)",
+    "notes": [
+      "UETR (Unique End-to-End Transaction Reference) is mandatory — UUID v4 format",
+      "IntrBkSttlmDt must equal the current business day; FedNow is 24x7x365",
+      "ChrgBr SLEV = Service Level; actual bearer determined by service agreement",
+      "FedNow settles in USD only; Ccy must always be 'USD'",
+      "MmbId values are 9-digit ABA routing numbers",
+      "BizSvc identifies FedNow as the clearing network"
+    ]
+  },
+
+  "iso20022": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": {
+              "ClrSysId": { "Cd": "USABA" },
+              "MmbId": "021000021"
+            },
+            "Nm": "JPMorgan Chase Bank, N.A.",
+            "PstlAdr": {
+              "AdrLine": "383 Madison Avenue",
+              "TwnNm": "New York",
+              "Ctry": "US"
+            }
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": {
+              "ClrSysId": { "Cd": "USABA" },
+              "MmbId": "021000089"
+            },
+            "Nm": "Bank of America, N.A."
+          }
+        }
+      },
+      "BizMsgIdr": "20250315JPMC0000000123",
+      "MsgDefIdr": "pacs.008.001.08",
+      "BizSvc": "iso20022:xsd$pacs.008.001.08",
+      "CreDtTm": "2025-03-15T14:23:45.123Z",
+      "PssblDplct": false
+    },
+
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pacs.008.001.08",
+      "FIToFICstmrCdtTrf": {
+
+        "GrpHdr": {
+          "MsgId": "FEDNOW20250315JPMC0000000123",
+          "CreDtTm": "2025-03-15T14:23:45.123Z",
+          "NbOfTxs": "1",
+          "TtlIntrBkSttlmAmt": {
+            "@Ccy": "USD",
+            "#text": "47500.00"
+          },
+          "IntrBkSttlmDt": "2025-03-15",
+          "SttlmInf": {
+            "SttlmMtd": "CLRG",
+            "ClrSys": {
+              "Cd": "FDN"
+            }
+          },
+          "InstgAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000021"
+              }
+            }
+          },
+          "InstdAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000089"
+              }
+            }
+          }
+        },
+
+        "CdtTrfTxInf": {
+          "PmtId": {
+            "InstrId": "JPMC20250315INS0000123",
+            "EndToEndId": "E2E-PAYROLL-MARCH-2025-0001",
+            "TxId": "FEDNOW20250315TXN000000123",
+            "UETR": "3d9f1c7a-2b4e-4f8a-9c1d-6e7f0a2b3c4d"
+          },
+          "IntrBkSttlmAmt": {
+            "@Ccy": "USD",
+            "#text": "47500.00"
+          },
+          "IntrBkSttlmDt": "2025-03-15",
+          "InstdAmt": {
+            "@Ccy": "USD",
+            "#text": "47500.00"
+          },
+          "XchgRate": "1.000000",
+          "ChrgBr": "SLEV",
+          "ChrgsInf": {
+            "Amt": {
+              "@Ccy": "USD",
+              "#text": "0.045"
+            },
+            "Agt": {
+              "FinInstnId": {
+                "ClrSysMmbId": {
+                  "ClrSysId": { "Cd": "USABA" },
+                  "MmbId": "021000021"
+                }
+              }
+            }
+          },
+          "Dbtr": {
+            "Nm": "Meridian Healthcare Corp",
+            "PstlAdr": {
+              "StrtNm": "1200 Financial Drive Suite 400",
+              "TwnNm": "New York",
+              "CtrySubDvsn": "NY",
+              "PstCd": "10022",
+              "Ctry": "US"
+            },
+            "Id": {
+              "OrgId": {
+                "AnyBIC": "MDHCUS33",
+                "Othr": {
+                  "Id": "47-3921845",
+                  "SchmeNm": { "Cd": "TXID" }
+                }
+              }
+            },
+            "CtryOfRes": "US"
+          },
+          "DbtrAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "4532109876543210",
+                "SchmeNm": { "Cd": "BBAN" }
+              }
+            },
+            "Tp": { "Cd": "CACC" },
+            "Ccy": "USD",
+            "Nm": "Meridian Healthcare Corp - Operating Account"
+          },
+          "DbtrAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000021"
+              },
+              "Nm": "JPMorgan Chase Bank, N.A.",
+              "PstlAdr": {
+                "AdrLine": "383 Madison Avenue",
+                "Ctry": "US"
+              }
+            }
+          },
+          "DbtrAgtAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "JPMC-FEDNOW-SETTLEMENT",
+                "SchmeNm": { "Prtry": "SETTLEMENTACCOUNT" }
+              }
+            }
+          },
+          "CdtrAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000089"
+              },
+              "Nm": "Bank of America, N.A.",
+              "PstlAdr": {
+                "AdrLine": "100 North Tryon Street",
+                "TwnNm": "Charlotte",
+                "Ctry": "US"
+              }
+            }
+          },
+          "CdtrAgtAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "BOA-FEDNOW-SETTLEMENT",
+                "SchmeNm": { "Prtry": "SETTLEMENTACCOUNT" }
+              }
+            }
+          },
+          "Cdtr": {
+            "Nm": "Apex Medical Suppliers LLC",
+            "PstlAdr": {
+              "StrtNm": "7800 Supply Chain Boulevard",
+              "TwnNm": "Charlotte",
+              "CtrySubDvsn": "NC",
+              "PstCd": "28201",
+              "Ctry": "US"
+            },
+            "Id": {
+              "OrgId": {
+                "Othr": {
+                  "Id": "82-4416790",
+                  "SchmeNm": { "Cd": "TXID" }
+                }
+              }
+            },
+            "CtryOfRes": "US"
+          },
+          "CdtrAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "8821097654321098",
+                "SchmeNm": { "Cd": "BBAN" }
+              }
+            },
+            "Tp": { "Cd": "CACC" },
+            "Ccy": "USD",
+            "Nm": "Apex Medical Suppliers LLC - Main Checking"
+          },
+          "InstrForCdtrAgt": {
+            "Cd": "PHOB"
+          },
+          "Purp": {
+            "Cd": "SUPP"
+          },
+          "RgltryRptg": {
+            "DbtCdtRptgInd": "CRED",
+            "Authrty": {
+              "Nm": "FinCEN",
+              "Ctry": "US"
+            }
+          },
+          "RmtInf": {
+            "Ustrd": "Payment for INV-2025-0892 and INV-2025-0901 - Medical supply order Q1 2025",
+            "Strd": {
+              "RfrdDocInf": [
+                {
+                  "Tp": {
+                    "CdOrPrtry": { "Cd": "CINV" }
+                  },
+                  "Nb": "INV-2025-0892",
+                  "RltdDt": "2025-03-01"
+                },
+                {
+                  "Tp": {
+                    "CdOrPrtry": { "Cd": "CINV" }
+                  },
+                  "Nb": "INV-2025-0901",
+                  "RltdDt": "2025-03-08"
+                }
+              ],
+              "RfrdDocAmt": {
+                "DuePyblAmt": {
+                  "@Ccy": "USD",
+                  "#text": "47500.00"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "FedNow",
+    "message_type": "Credit Transfer",
+    "message_id": "FEDNOW20250315JPMC0000000123",
+    "business_message_id": "20250315JPMC0000000123",
+    "created_at": "2025-03-15T14:23:45.123Z",
+    "settlement_date": "2025-03-15",
+    "settlement_network": "FDN",
+
+    "payment": {
+      "instruction_id": "JPMC20250315INS0000123",
+      "end_to_end_id": "E2E-PAYROLL-MARCH-2025-0001",
+      "transaction_id": "FEDNOW20250315TXN000000123",
+      "uetr": "3d9f1c7a-2b4e-4f8a-9c1d-6e7f0a2b3c4d",
+      "amount": 47500.00,
+      "currency": "USD",
+      "charge_bearer": "SLEV",
+      "network_fee": 0.045,
+      "purpose_code": "SUPP",
+      "purpose_description": "Supplier Payment",
+      "remittance_info": "Payment for INV-2025-0892 and INV-2025-0901 - Medical supply order Q1 2025",
+      "invoice_references": ["INV-2025-0892", "INV-2025-0901"]
+    },
+
+    "sender_bank": {
+      "name": "JPMorgan Chase Bank, N.A.",
+      "routing_number": "021000021",
+      "role": "instructing_agent"
+    },
+
+    "debtor": {
+      "name": "Meridian Healthcare Corp",
+      "account_number": "4532109876543210",
+      "account_type": "CACC",
+      "tax_id": "47-3921845",
+      "address": {
+        "street": "1200 Financial Drive Suite 400",
+        "city": "New York",
+        "state": "NY",
+        "postal_code": "10022",
+        "country": "US"
+      }
+    },
+
+    "receiver_bank": {
+      "name": "Bank of America, N.A.",
+      "routing_number": "021000089",
+      "role": "instructed_agent"
+    },
+
+    "creditor": {
+      "name": "Apex Medical Suppliers LLC",
+      "account_number": "8821097654321098",
+      "account_type": "CACC",
+      "tax_id": "82-4416790",
+      "address": {
+        "street": "7800 Supply Chain Boulevard",
+        "city": "Charlotte",
+        "state": "NC",
+        "postal_code": "28201",
+        "country": "US"
+      }
+    }
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "_metadata": {
+    "network": "Zelle (Early Warning Services)",
+    "message_type": "Payment Status Inquiry",
+    "description": "Query the status of an existing Zelle payment by paymentId or endToEndId",
+    "api_pattern": "REST GET request",
+    "status_lifecycle": {
+      "PENDING": "Recipient not enrolled — awaiting enrollment. Expires after 14 days.",
+      "COMPLETED": "Funds credited to recipient — FINAL, cannot be reversed",
+      "REJECTED": "Payment failed — see exceptions block for error details",
+      "CANCELLED": "Payment cancelled while still in PENDING state (only possible before recipient enrolls)"
+    },
+    "notes": [
+      "Once COMPLETED, Zelle has no standard return/reversal mechanism",
+      "REJECTED payments do NOT debit the sender — funds never left sender's account",
+      "Banks may impose their own timeout rules shorter than the 14-day EWS window",
+      "Fraud disputes are handled outside the Zelle protocol via the sending bank"
+    ]
+  },
+
+  "api_request": {
+    "_endpoint": "GET /api/v1/payments/zelle/{paymentId}",
+    "_headers": {
+      "Authorization": "Bearer {oauth_token}",
+      "X-JP-Client-Id": "{client_id}"
+    },
+    "paymentId": "ZEL20250315JPMC000078901"
+  },
+
+  "api_response_completed": {
+    "_http_status": 200,
+    "payments": {
+      "paymentId": "ZEL20250315JPMC000078901",
+      "firmRootId": "FROOTJPMC20250315001",
+      "endToEndId": "E2E-ZELLE-20250315-0001",
+      "createDateTime": "2025-03-15T14:23:45.521Z",
+      "lastUpdatedDateTime": "2025-03-15T14:24:12.107Z",
+      "paymentStatus": "COMPLETED",
+      "paymentAmount": 425.00,
+      "paymentCurrency": "USD",
+      "requestedExecutionDate": "2025-03-15",
+      "actualSettlementDate": "2025-03-15",
+      "memo": "March rent split — apartment utilities",
+      "zelleNetworkTransactionId": "ZNT20250315ABCDEF123456",
+      "processingTime": {
+        "submitToCompleteMs": 26586,
+        "networkRoundtripMs": 1244
+      },
+      "creditor": {
+        "creditorName": "Marcus T. Rivera",
+        "creditorAccount": {
+          "alternateAccountIdentifier": "marcus.rivera@gmail.com",
+          "schemeName": { "proprietary": "EMAL" },
+          "recipientEnrollmentStatus": "ENROLLED",
+          "recipientBankName": "Bank of America"
+        }
+      }
+    }
+  },
+
+  "api_response_rejected": {
+    "_http_status": 200,
+    "_note": "HTTP 200 is returned even for REJECTED — check paymentStatus field",
+    "payments": {
+      "paymentId": "ZEL20250315JPMC000078905",
+      "endToEndId": "E2E-ZELLE-20250315-0005",
+      "createDateTime": "2025-03-15T15:10:22.000Z",
+      "lastUpdatedDateTime": "2025-03-15T15:10:23.441Z",
+      "paymentStatus": "REJECTED",
+      "paymentAmount": 1200.00,
+      "paymentCurrency": "USD",
+      "memo": "Freelance payment March",
+      "exceptions": {
+        "errorCode": "DAILY_LIMIT_EXCEEDED",
+        "errorDescription": "Payment exceeds the daily sending limit for this account. Current limit: USD 1000.00.",
+        "ruleDefinition": "SENDER_DAILY_LIMIT",
+        "retryable": false
+      }
+    }
+  },
+
+  "api_response_all_rejection_codes": {
+    "_note": "Reference: common Zelle rejection error codes",
+    "error_codes": {
+      "DAILY_LIMIT_EXCEEDED": "Payment exceeds sender's daily limit (bank-set, not EWS-set)",
+      "MONTHLY_LIMIT_EXCEEDED": "Payment exceeds sender's monthly cumulative limit",
+      "RECIPIENT_NOT_ENROLLED_EXPIRED": "Recipient did not enrol within 14-day window — payment auto-cancelled",
+      "INVALID_TOKEN": "Email/phone number not associated with any Zelle account",
+      "ACCOUNT_RESTRICTED": "Sender or recipient account has a restriction (e.g., fraud hold)",
+      "INSUFFICIENT_FUNDS": "Insufficient funds in sender's account at time of processing",
+      "DUPLICATE_PAYMENT": "Duplicate detected — same EndToEndId already processed",
+      "FRAUD_BLOCKED": "Payment blocked by EWS or bank fraud detection rules",
+      "RECIPIENT_LIMIT_EXCEEDED": "Recipient's bank-imposed daily receive limit exceeded",
+      "SERVICE_UNAVAILABLE": "Zelle network temporarily unavailable — retry after backoff"
+    }
+  },
+
+  "api_response_pending": {
+    "_http_status": 200,
+    "payments": {
+      "paymentId": "ZEL20250315JPMC000078902",
+      "endToEndId": "E2E-ZELLE-20250315-0003",
+      "createDateTime": "2025-03-15T14:30:00.000Z",
+      "lastUpdatedDateTime": "2025-03-15T14:30:00.000Z",
+      "paymentStatus": "PENDING",
+      "paymentAmount": 200.00,
+      "paymentCurrency": "USD",
+      "memo": "Thanks for dinner!",
+      "recipientEnrollmentStatus": "NOT_ENROLLED",
+      "invitationDetails": {
+        "invitationSentAt": "2025-03-15T14:30:01.000Z",
+        "invitationChannel": "EMAIL",
+        "invitationAddress": "alex.chen@example.com",
+        "expiresAt": "2025-03-29T14:30:00.000Z",
+        "remindersSent": 1,
+        "nextReminderAt": "2025-03-18T14:30:00.000Z"
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "Zelle",
+    "message_type": "Payment Status",
+
+    "completed_example": {
+      "payment_id": "ZEL20250315JPMC000078901",
+      "status": "COMPLETED",
+      "amount": 425.00,
+      "created_at": "2025-03-15T14:23:45.521Z",
+      "completed_at": "2025-03-15T14:24:12.107Z",
+      "processing_time_seconds": 26.6,
+      "is_reversible": false
+    },
+
+    "rejected_example": {
+      "payment_id": "ZEL20250315JPMC000078905",
+      "status": "REJECTED",
+      "error_code": "DAILY_LIMIT_EXCEEDED",
+      "debited": false,
+      "retryable": false
+    },
+
+    "pending_example": {
+      "payment_id": "ZEL20250315JPMC000078902",
+      "status": "PENDING",
+      "expires_at": "2025-03-29T14:30:00.000Z",
+      "can_cancel": true
+    }
+  }
+}

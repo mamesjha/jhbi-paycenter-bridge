@@ -1,0 +1,133 @@
+{
+  "_metadata": {
+    "network": "RTP (The Clearing House)",
+    "message_type": "pain.013.001.06",
+    "description": "Request for Payment (RfP) via RTP — creditor requests payment from debtor through the RTP network",
+    "schema_version": "ISO 20022 pain.013.001.06",
+    "rtp_rfp_notes": [
+      "RTP RfP uses pain.013.001.06; FedNow uses .001.07 — minor field differences",
+      "RfP does not move funds; it is a presentment / notification",
+      "The payer must respond via pain.014 within the expiry window",
+      "Best practice: set XpryDt 24-48 hours from ReqdExctnDt for B2B",
+      "LinkRef in resulting pacs.008 must contain the pain.013 EndToEndId",
+      "RTP RfP commonly used for: e-invoicing, bill payment, gig economy payouts"
+    ]
+  },
+
+  "iso20022": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "122000247" },
+            "Nm": "Wells Fargo Bank, N.A."
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "026009593" },
+            "Nm": "Citibank, N.A."
+          }
+        }
+      },
+      "BizMsgIdr": "20250315WFB0000RFP001",
+      "MsgDefIdr": "pain.013.001.06",
+      "BizSvc": "iso20022:xsd$pain.013.001.06",
+      "CreDtTm": "2025-03-14T16:00:00.000Z"
+    },
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pain.013.001.06",
+      "CdtrPmtActvtnReq": {
+        "GrpHdr": {
+          "MsgId": "RTPRFP20250314WFB0000001",
+          "CreDtTm": "2025-03-14T16:00:00.000Z",
+          "NbOfTxs": "1",
+          "CtrlSum": "3850.75",
+          "InitgPty": {
+            "Nm": "Wells Fargo Bank, N.A.",
+            "Id": { "OrgId": { "AnyBIC": "WFBIUS6S" } }
+          }
+        },
+        "PmtInf": {
+          "PmtInfId": "RTPRFP20250314WFB0000001PMT",
+          "PmtMtd": "TRF",
+          "ReqdExctnDt": { "Dt": "2025-03-15" },
+          "XpryDt": { "Dt": "2025-03-16" },
+          "PmtTpInf": {
+            "SvcLvl": { "Cd": "URGP" },
+            "LclInstrm": { "Cd": "RTP" },
+            "CtgyPurp": { "Cd": "BEXP" }
+          },
+          "Dbtr": {
+            "Nm": "GlobalTech Solutions Inc",
+            "PstlAdr": { "TwnNm": "New York", "CtrySubDvsn": "NY", "Ctry": "US" },
+            "Id": { "OrgId": { "Othr": { "Id": "13-4567890", "SchmeNm": { "Cd": "TXID" } } } }
+          },
+          "DbtrAcct": {
+            "Id": { "Othr": { "Id": "7654321098765432", "SchmeNm": { "Cd": "BBAN" } } }
+          },
+          "DbtrAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "026009593" }
+            }
+          },
+          "CdtTrfTxInf": {
+            "PmtId": {
+              "InstrId": "WFB20250314RFP0000001",
+              "EndToEndId": "E2E-RFP-PCCONSULT-20250315",
+              "UETR": "c2d3e4f5-a6b7-8c9d-0e1f-2a3b4c5d6e7f"
+            },
+            "Amt": {
+              "InstdAmt": { "@Ccy": "USD", "#text": "3850.75" }
+            },
+            "ChrgBr": "SLEV",
+            "CdtrAgt": {
+              "FinInstnId": {
+                "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "122000247" }
+              }
+            },
+            "Cdtr": {
+              "Nm": "Pacific Coast Consulting LLC",
+              "PstlAdr": { "TwnNm": "San Francisco", "CtrySubDvsn": "CA", "Ctry": "US" }
+            },
+            "CdtrAcct": {
+              "Id": { "Othr": { "Id": "1122334455667788", "SchmeNm": { "Cd": "BBAN" } } }
+            },
+            "Purp": { "Cd": "BEXP" },
+            "RmtInf": {
+              "Ustrd": "Invoice PCC-INV-2025-0115 — Consulting services March 2025 — due 2025-03-15"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "RTP",
+    "message_type": "Request for Payment (RfP)",
+    "rfp_id": "RTPRFP20250314WFB0000001",
+    "end_to_end_id": "E2E-RFP-PCCONSULT-20250315",
+    "uetr": "c2d3e4f5-a6b7-8c9d-0e1f-2a3b4c5d6e7f",
+    "created_at": "2025-03-14T16:00:00.000Z",
+    "requested_execution_date": "2025-03-15",
+    "expiry_date": "2025-03-16",
+    "amount": 3850.75,
+    "currency": "USD",
+    "remittance": "Invoice PCC-INV-2025-0115 — Consulting services March 2025",
+    "creditor": {
+      "name": "Pacific Coast Consulting LLC",
+      "bank": "Wells Fargo Bank, N.A.",
+      "routing_number": "122000247",
+      "account_number": "1122334455667788"
+    },
+    "debtor": {
+      "name": "GlobalTech Solutions Inc",
+      "bank": "Citibank, N.A.",
+      "routing_number": "026009593",
+      "account_number": "7654321098765432"
+    }
+  }
+}

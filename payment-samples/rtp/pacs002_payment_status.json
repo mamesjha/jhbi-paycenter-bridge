@@ -1,0 +1,142 @@
+{
+  "_metadata": {
+    "network": "RTP (The Clearing House)",
+    "message_type": "pacs.002.001.10",
+    "description": "FI to FI Payment Status Report — RTP sends this to confirm, pend, or reject a credit transfer",
+    "schema_version": "ISO 20022 pacs.002.001.10",
+    "rtp_status_lifecycle": [
+      "1. Sender submits pacs.008 → TCH sends ACTC (technical validation passed)",
+      "2. TCH routes to receiver → Receiver sends ACWP (accepted, pending posting)",
+      "3. Receiver posts to account → Receiver sends ACCP (fully accepted and settled)",
+      "OR  Receiver rejects → Receiver sends RJCT within 15 seconds"
+    ],
+    "status_codes": {
+      "ACTC": "AcceptedTechnicalValidation — TCH validated the message format/routing",
+      "ACWP": "AcceptedWithoutPosting — receiver FI accepted, not yet posted to account",
+      "ACCP": "AcceptedCustomerProfile — posted to creditor account, funds available",
+      "RJCT": "Rejected — see StsRsnInf for reason code"
+    },
+    "rtp_vs_fednow_status": "RTP uses ACTC as an intermediate; FedNow goes directly to ACCP. RTP's 15-second window is tighter than FedNow's 20-second window."
+  },
+
+  "iso20022_accp": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "122000247" },
+            "Nm": "Wells Fargo Bank, N.A."
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "026009593" },
+            "Nm": "Citibank, N.A."
+          }
+        }
+      },
+      "BizMsgIdr": "20250315WFB0000000888",
+      "MsgDefIdr": "pacs.002.001.10",
+      "BizSvc": "iso20022:xsd$pacs.002.001.10",
+      "CreDtTm": "2025-03-15T18:05:46.092Z"
+    },
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pacs.002.001.10",
+      "FIToFIPmtStsRpt": {
+        "GrpHdr": {
+          "MsgId": "RTPSTATUS20250315WFB0000001",
+          "CreDtTm": "2025-03-15T18:05:46.092Z",
+          "InstgAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "122000247" }
+            }
+          },
+          "InstdAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": { "ClrSysId": { "Cd": "USABA" }, "MmbId": "026009593" }
+            }
+          }
+        },
+        "OrgnlGrpInfAndSts": {
+          "OrgnlMsgId": "RTP20250315CITI0000000555",
+          "OrgnlMsgNmId": "pacs.008.001.07",
+          "OrgnlCreDtTm": "2025-03-15T18:05:33.721Z",
+          "OrgnlNbOfTxs": "1",
+          "GrpSts": "ACCP"
+        },
+        "TxInfAndSts": {
+          "StsId": "RTPSTS20250315WFB0000001",
+          "OrgnlInstrId": "CITI20250315INS0000555",
+          "OrgnlEndToEndId": "E2E-INVOICE-WFB-2025-0315",
+          "OrgnlTxId": "RTP20250315TXN000000555",
+          "OrgnlUETR": "f1e2d3c4-b5a6-7f8e-9d0c-b1a2c3d4e5f6",
+          "TxSts": "ACCP",
+          "SttlmInf": {
+            "SttlmMtd": "CLRG",
+            "ClrSys": { "Cd": "TCH" }
+          },
+          "AccptncDtTm": "2025-03-15T18:05:45.888Z",
+          "FctvIntrBkSttlmDt": "2025-03-15",
+          "OrgnlTxRef": {
+            "IntrBkSttlmAmt": { "@Ccy": "USD", "#text": "3850.75" },
+            "IntrBkSttlmDt": "2025-03-15",
+            "Dbtr": { "Nm": "GlobalTech Solutions Inc" },
+            "Cdtr": { "Nm": "Pacific Coast Consulting LLC" }
+          }
+        }
+      }
+    }
+  },
+
+  "iso20022_actc": {
+    "_note": "Intermediate ACTC status from TCH after technical validation (before routing to receiver bank)",
+    "TxInfAndSts": {
+      "StsId": "TCHRTP20250315TXN000000555ACK",
+      "OrgnlTxId": "RTP20250315TXN000000555",
+      "OrgnlUETR": "f1e2d3c4-b5a6-7f8e-9d0c-b1a2c3d4e5f6",
+      "TxSts": "ACTC",
+      "AccptncDtTm": "2025-03-15T18:05:34.210Z",
+      "StsRsnInf": {
+        "AddtlInf": "Message accepted by TCH for routing. Pending delivery to receiving institution."
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "RTP",
+    "message_type": "Payment Status Report",
+
+    "final_status": {
+      "message_id": "RTPSTATUS20250315WFB0000001",
+      "created_at": "2025-03-15T18:05:46.092Z",
+      "original_transaction_id": "RTP20250315TXN000000555",
+      "original_uetr": "f1e2d3c4-b5a6-7f8e-9d0c-b1a2c3d4e5f6",
+      "status": "ACCP",
+      "status_description": "Funds posted to creditor account",
+      "accepted_at": "2025-03-15T18:05:45.888Z",
+      "settlement_date": "2025-03-15",
+      "total_turnaround_ms": 12371,
+      "reporting_bank": "Wells Fargo Bank, N.A."
+    },
+
+    "intermediate_statuses": [
+      {
+        "status": "ACTC",
+        "at_ms_offset": 489,
+        "description": "TCH technical validation passed — routing to receiver"
+      },
+      {
+        "status": "ACWP",
+        "at_ms_offset": 8200,
+        "description": "Receiver bank accepted — posting in progress"
+      },
+      {
+        "status": "ACCP",
+        "at_ms_offset": 12371,
+        "description": "Funds posted and available to creditor"
+      }
+    ]
+  }
+}

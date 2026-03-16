@@ -1,0 +1,193 @@
+{
+  "_metadata": {
+    "network": "FedNow",
+    "message_type": "FedNow Liquidity Management Transfer (LMT)",
+    "description": "Transfers funds between a participating bank's Master Account and its FedNow Prefunded Balance to maintain intraday liquidity for FedNow settlement",
+    "underlying_mechanism": "Fedwire Funds Service (pacs.009 Credit Transfer)",
+    "iso_message_type": "pacs.009.001.08",
+    "notes": [
+      "FedNow requires a Prefunded Balance — a pre-funded pool held at the Fed",
+      "LMTs move money FROM the bank's Fed Master Account INTO the FedNow Balance (top-up)",
+      "Or FROM the FedNow Balance back to the Master Account (drawdown)",
+      "LMTs are settled via Fedwire Funds, not via FedNow clearing",
+      "FedNow Balance must always be ≥ 0; payments are rejected if balance insufficient",
+      "LMTs are typically automated by treasury management systems"
+    ],
+    "lmt_types": {
+      "TOP_UP": "Master Account → FedNow Prefunded Balance (increase available liquidity)",
+      "DRAWDOWN": "FedNow Prefunded Balance → Master Account (reclaim excess liquidity)"
+    }
+  },
+
+  "iso20022": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": {
+              "ClrSysId": { "Cd": "USABA" },
+              "MmbId": "021000021"
+            },
+            "Nm": "JPMorgan Chase Bank, N.A."
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "BICFI": "FRNYUS33",
+            "Nm": "Federal Reserve Bank of New York"
+          }
+        }
+      },
+      "BizMsgIdr": "20250315JPMC0000LMT001",
+      "MsgDefIdr": "pacs.009.001.08",
+      "BizSvc": "fedwire",
+      "CreDtTm": "2025-03-15T07:30:00.000Z"
+    },
+
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pacs.009.001.08",
+      "FICdtTrf": {
+
+        "GrpHdr": {
+          "MsgId": "LMT20250315JPMC0000001",
+          "CreDtTm": "2025-03-15T07:30:00.000Z",
+          "NbOfTxs": "1",
+          "TtlIntrBkSttlmAmt": {
+            "@Ccy": "USD",
+            "#text": "25000000.00"
+          },
+          "IntrBkSttlmDt": "2025-03-15",
+          "SttlmInf": {
+            "SttlmMtd": "CLRG",
+            "ClrSys": { "Cd": "FDW" }
+          },
+          "InstgAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000021"
+              }
+            }
+          },
+          "InstdAgt": {
+            "FinInstnId": {
+              "BICFI": "FRNYUS33"
+            }
+          }
+        },
+
+        "CdtTrfTxInf": {
+          "PmtId": {
+            "InstrId": "JPMC20250315LMT0000001",
+            "EndToEndId": "LMT-TOPUP-20250315-001",
+            "TxId": "FEDWIRELMT20250315001",
+            "UETR": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6"
+          },
+          "IntrBkSttlmAmt": {
+            "@Ccy": "USD",
+            "#text": "25000000.00"
+          },
+          "IntrBkSttlmDt": "2025-03-15",
+          "InstgAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000021"
+              }
+            }
+          },
+          "InstdAgt": {
+            "FinInstnId": {
+              "BICFI": "FRNYUS33"
+            }
+          },
+          "Dbtr": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000021"
+              },
+              "Nm": "JPMorgan Chase Bank, N.A."
+            }
+          },
+          "DbtrAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "MASTER-ACCOUNT-JPMC",
+                "SchmeNm": { "Prtry": "FEDMASTERACCOUNT" }
+              }
+            }
+          },
+          "Cdtr": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000021"
+              },
+              "Nm": "JPMorgan Chase Bank, N.A."
+            }
+          },
+          "CdtrAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "FEDNOW-PREFUNDED-BAL-JPMC",
+                "SchmeNm": { "Prtry": "FEDNOWTOPUP" }
+              }
+            }
+          },
+          "InstrForNxtAgt": {
+            "Prtry": "FEDNOW-LMT-TOPUP"
+          },
+          "Purp": {
+            "Prtry": "LMTTOPUP"
+          },
+          "RmtInf": {
+            "Ustrd": "FedNow Prefunded Balance Top-Up - Morning liquidity adjustment 2025-03-15"
+          }
+        }
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "FedNow / Fedwire",
+    "message_type": "Liquidity Management Transfer (LMT)",
+    "lmt_id": "LMT20250315JPMC0000001",
+    "lmt_type": "TOP_UP",
+    "lmt_type_description": "Transfer from Master Account to FedNow Prefunded Balance",
+    "created_at": "2025-03-15T07:30:00.000Z",
+    "settlement_date": "2025-03-15",
+    "settlement_mechanism": "Fedwire Funds Service (FDW)",
+    "uetr": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+
+    "transfer": {
+      "amount": 25000000.00,
+      "currency": "USD",
+      "purpose": "Morning liquidity top-up for FedNow payment activity"
+    },
+
+    "source": {
+      "account_type": "Fed Master Account",
+      "account_id": "MASTER-ACCOUNT-JPMC",
+      "bank_name": "JPMorgan Chase Bank, N.A.",
+      "routing_number": "021000021"
+    },
+
+    "destination": {
+      "account_type": "FedNow Prefunded Balance",
+      "account_id": "FEDNOW-PREFUNDED-BAL-JPMC",
+      "bank_name": "JPMorgan Chase Bank, N.A.",
+      "routing_number": "021000021"
+    },
+
+    "drawdown_example": {
+      "_note": "To pull excess liquidity back from FedNow balance to Master Account, reverse source and destination",
+      "lmt_type": "DRAWDOWN",
+      "source_account_type": "FedNow Prefunded Balance",
+      "destination_account_type": "Fed Master Account",
+      "purpose": "End-of-day liquidity reclaim — excess FedNow balance returned to Master"
+    }
+  }
+}

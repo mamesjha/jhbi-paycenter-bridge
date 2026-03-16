@@ -1,0 +1,211 @@
+{
+  "_metadata": {
+    "network": "FedNow",
+    "message_type": "pacs.002.001.10",
+    "description": "FI to FI Payment Status Report — sent by the receiving bank to acknowledge or reject a credit transfer",
+    "schema_version": "ISO 20022 pacs.002.001.10",
+    "status_codes": {
+      "ACCP": "AcceptedCustomerProfile — payment accepted and posted to creditor account",
+      "ACWP": "AcceptedWithoutPosting — accepted by receiving FI, not yet posted (intermediate state)",
+      "PDNG": "Pending — FedNow received the message, validations in progress",
+      "RJCT": "Rejected — payment rejected; StsRsnInf.Rsn.Cd is mandatory when RJCT",
+      "ACTC": "AcceptedTechnicalValidation — technical validation passed (RTP also uses this; FedNow uses ACCP)"
+    },
+    "reject_reason_codes": {
+      "AC01": "Incorrect account number",
+      "AC04": "Closed account number",
+      "AC06": "Blocked account",
+      "AG01": "Transaction forbidden",
+      "AG02": "Invalid bank operation code",
+      "AM04": "Insufficient funds",
+      "AM05": "Duplicate payment",
+      "NARR": "Narrative (free-text reason in AddtlInf)"
+    },
+    "notes": [
+      "OrgnlMsgId and OrgnlMsgNmId must match the pacs.008 they are responding to",
+      "OrgnlUETR is mandatory — must echo back the UETR from the credit transfer",
+      "FedNow sends ACCP immediately upon successful settlement",
+      "RJCT is sent synchronously within the FedNow response window (≤10 seconds)"
+    ]
+  },
+
+  "iso20022": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": {
+              "ClrSysId": { "Cd": "USABA" },
+              "MmbId": "021000089"
+            },
+            "Nm": "Bank of America, N.A."
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": {
+              "ClrSysId": { "Cd": "USABA" },
+              "MmbId": "021000021"
+            },
+            "Nm": "JPMorgan Chase Bank, N.A."
+          }
+        }
+      },
+      "BizMsgIdr": "20250315BOA0000000456",
+      "MsgDefIdr": "pacs.002.001.10",
+      "BizSvc": "iso20022:xsd$pacs.002.001.10",
+      "CreDtTm": "2025-03-15T14:23:46.892Z"
+    },
+
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pacs.002.001.10",
+      "FIToFIPmtStsRpt": {
+
+        "GrpHdr": {
+          "MsgId": "STATUSRPT20250315BOA0000000456",
+          "CreDtTm": "2025-03-15T14:23:46.892Z",
+          "InstgAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000089"
+              }
+            }
+          },
+          "InstdAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "021000021"
+              }
+            }
+          }
+        },
+
+        "OrgnlGrpInfAndSts": {
+          "OrgnlMsgId": "FEDNOW20250315JPMC0000000123",
+          "OrgnlMsgNmId": "pacs.008.001.08",
+          "OrgnlCreDtTm": "2025-03-15T14:23:45.123Z",
+          "OrgnlNbOfTxs": "1",
+          "OrgnlCtrlSum": "47500.00",
+          "GrpSts": "ACCP"
+        },
+
+        "TxInfAndSts": {
+          "StsId": "STSR20250315BOA0000000456",
+          "OrgnlInstrId": "JPMC20250315INS0000123",
+          "OrgnlEndToEndId": "E2E-PAYROLL-MARCH-2025-0001",
+          "OrgnlTxId": "FEDNOW20250315TXN000000123",
+          "OrgnlUETR": "3d9f1c7a-2b4e-4f8a-9c1d-6e7f0a2b3c4d",
+          "TxSts": "ACCP",
+          "SttlmInf": {
+            "SttlmMtd": "CLRG",
+            "ClrSys": { "Cd": "FDN" }
+          },
+          "AccptncDtTm": "2025-03-15T14:23:46.731Z",
+          "FctvIntrBkSttlmDt": "2025-03-15",
+          "OrgnlTxRef": {
+            "IntrBkSttlmAmt": {
+              "@Ccy": "USD",
+              "#text": "47500.00"
+            },
+            "IntrBkSttlmDt": "2025-03-15",
+            "InstdAmt": {
+              "@Ccy": "USD",
+              "#text": "47500.00"
+            },
+            "Dbtr": {
+              "Nm": "Meridian Healthcare Corp"
+            },
+            "DbtrAgt": {
+              "FinInstnId": {
+                "ClrSysMmbId": {
+                  "ClrSysId": { "Cd": "USABA" },
+                  "MmbId": "021000021"
+                }
+              }
+            },
+            "CdtrAgt": {
+              "FinInstnId": {
+                "ClrSysMmbId": {
+                  "ClrSysId": { "Cd": "USABA" },
+                  "MmbId": "021000089"
+                }
+              }
+            },
+            "Cdtr": {
+              "Nm": "Apex Medical Suppliers LLC"
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "iso20022_rejection_example": {
+    "_note": "Alternative TxInfAndSts block for a RJCT (rejected) response",
+    "TxInfAndSts": {
+      "StsId": "STSR20250315BOA0000000457",
+      "OrgnlInstrId": "JPMC20250315INS0000124",
+      "OrgnlEndToEndId": "E2E-PAYROLL-MARCH-2025-0002",
+      "OrgnlTxId": "FEDNOW20250315TXN000000124",
+      "OrgnlUETR": "8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d",
+      "TxSts": "RJCT",
+      "StsRsnInf": {
+        "Orgtr": {
+          "Nm": "Bank of America, N.A.",
+          "Id": {
+            "OrgId": {
+              "AnyBIC": "BOFAUS3N"
+            }
+          }
+        },
+        "Rsn": {
+          "Cd": "AC04"
+        },
+        "AddtlInf": "Creditor account 8821097654321099 is closed. Please verify account details with beneficiary."
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "FedNow",
+    "message_type": "Payment Status Report",
+    "message_id": "STATUSRPT20250315BOA0000000456",
+    "created_at": "2025-03-15T14:23:46.892Z",
+
+    "original_payment": {
+      "message_id": "FEDNOW20250315JPMC0000000123",
+      "instruction_id": "JPMC20250315INS0000123",
+      "end_to_end_id": "E2E-PAYROLL-MARCH-2025-0001",
+      "transaction_id": "FEDNOW20250315TXN000000123",
+      "uetr": "3d9f1c7a-2b4e-4f8a-9c1d-6e7f0a2b3c4d",
+      "amount": 47500.00,
+      "currency": "USD"
+    },
+
+    "status": {
+      "group_status": "ACCP",
+      "transaction_status": "ACCP",
+      "status_description": "AcceptedCustomerProfile — payment settled and credited",
+      "accepted_at": "2025-03-15T14:23:46.731Z",
+      "settlement_date": "2025-03-15",
+      "settlement_network": "FDN",
+      "turnaround_ms": 1608
+    },
+
+    "reporting_bank": {
+      "name": "Bank of America, N.A.",
+      "routing_number": "021000089"
+    },
+
+    "rejection_example": {
+      "status": "RJCT",
+      "reason_code": "AC04",
+      "reason_description": "Closed account number",
+      "additional_info": "Creditor account is closed. Please verify account details with beneficiary."
+    }
+  }
+}

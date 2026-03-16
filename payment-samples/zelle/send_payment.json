@@ -1,0 +1,191 @@
+{
+  "_metadata": {
+    "network": "Zelle (Early Warning Services)",
+    "message_type": "Payment Initiation",
+    "description": "Zelle payment send request via the EWS network — recipient identified by email or phone (token), not account number",
+    "api_pattern": "REST JSON over HTTPS",
+    "key_differences_from_fednow_rtp": {
+      "recipient_id": "Zelle uses email/phone tokens — no account numbers exchanged between parties",
+      "settlement": "Funds move via ACH or internal bank transfer within 1-3 minutes for enrolled recipients",
+      "enrollment": "Recipient must be enrolled in Zelle. If not enrolled, payment is 'pending' for 14 days",
+      "amount_limits": "Typically $500-$2,500/day depending on bank (not network-wide — each bank sets limits)",
+      "reversals": "No standardised return mechanism — Zelle does not support reversals once COMPLETED",
+      "iso20022": "Zelle is NOT ISO 20022 natively; some banks wrap it in ISO 20022 for internal routing",
+      "fraud_risk": "Because payments are nearly instant and non-reversible, fraud rules are aggressive"
+    },
+    "recipient_identifier_schemes": {
+      "EMAL": "Email address — e.g., john.smith@example.com",
+      "PHON": "US mobile phone number — e.g., +12125550101"
+    },
+    "sources": [
+      "J.P. Morgan Global Payments API - Zelle Disbursements",
+      "https://developer.payments.jpmorgan.com/docs/treasury/global-payments/capabilities/global-payments/zelle-disbursements"
+    ]
+  },
+
+  "api_request": {
+    "_endpoint": "POST /api/v1/payments/zelle",
+    "_headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer {oauth_token}",
+      "X-JP-Client-Id": "{client_id}",
+      "Idempotency-Key": "IDMP-20250315-ZELLE-001"
+    },
+    "payments": {
+      "requestedExecutionDate": "2025-03-15",
+      "paymentIdentifiers": {
+        "endToEndId": "E2E-ZELLE-20250315-0001"
+      },
+      "paymentCurrency": "USD",
+      "paymentAmount": 425.00,
+      "transferType": "CREDIT",
+      "memo": "March rent split — apartment utilities",
+      "debtor": {
+        "debtorName": "Sarah J. Williams",
+        "debtorAccount": {
+          "accountId": "9988776655443322",
+          "accountType": "CHECKING"
+        }
+      },
+      "debtorAgent": {
+        "financialInstitutionId": {
+          "bic": "CHASUS33",
+          "clearingSystemMemberId": {
+            "clearingSystemId": "USABA",
+            "memberId": "021000021"
+          }
+        }
+      },
+      "creditor": {
+        "creditorName": "Marcus T. Rivera",
+        "creditorAccount": {
+          "accountType": "ZELLE",
+          "alternateAccountIdentifier": "marcus.rivera@gmail.com",
+          "schemeName": {
+            "proprietary": "EMAL"
+          }
+        }
+      }
+    }
+  },
+
+  "api_request_phone_variant": {
+    "_note": "Same payment using phone number instead of email to identify recipient",
+    "payments": {
+      "requestedExecutionDate": "2025-03-15",
+      "paymentIdentifiers": {
+        "endToEndId": "E2E-ZELLE-20250315-0002"
+      },
+      "paymentCurrency": "USD",
+      "paymentAmount": 425.00,
+      "transferType": "CREDIT",
+      "memo": "March rent split — apartment utilities",
+      "debtor": {
+        "debtorName": "Sarah J. Williams",
+        "debtorAccount": {
+          "accountId": "9988776655443322",
+          "accountType": "CHECKING"
+        }
+      },
+      "debtorAgent": {
+        "financialInstitutionId": {
+          "bic": "CHASUS33"
+        }
+      },
+      "creditor": {
+        "creditorName": "Marcus T. Rivera",
+        "creditorAccount": {
+          "accountType": "ZELLE",
+          "alternateAccountIdentifier": "+12125550188",
+          "schemeName": {
+            "proprietary": "PHON"
+          }
+        }
+      }
+    }
+  },
+
+  "api_response_success": {
+    "_http_status": 201,
+    "payments": {
+      "paymentId": "ZEL20250315JPMC000078901",
+      "firmRootId": "FROOTJPMC20250315001",
+      "endToEndId": "E2E-ZELLE-20250315-0001",
+      "createDateTime": "2025-03-15T14:23:45.521Z",
+      "paymentStatus": "COMPLETED",
+      "paymentAmount": 425.00,
+      "paymentCurrency": "USD",
+      "requestedExecutionDate": "2025-03-15",
+      "actualSettlementDate": "2025-03-15",
+      "memo": "March rent split — apartment utilities",
+      "debtor": {
+        "debtorName": "Sarah J. Williams",
+        "debtorAccount": { "accountId": "9988776655443322" }
+      },
+      "creditor": {
+        "creditorName": "Marcus T. Rivera",
+        "creditorAccount": {
+          "alternateAccountIdentifier": "marcus.rivera@gmail.com",
+          "schemeName": { "proprietary": "EMAL" }
+        }
+      },
+      "zelleNetworkTransactionId": "ZNT20250315ABCDEF123456",
+      "zelleRecipientToken": "TOKEN-MRIVERA-ENROLLED-2024",
+      "recipientEnrollmentStatus": "ENROLLED"
+    }
+  },
+
+  "api_response_pending": {
+    "_note": "Recipient is not enrolled in Zelle — payment pending for up to 14 days",
+    "_http_status": 201,
+    "payments": {
+      "paymentId": "ZEL20250315JPMC000078902",
+      "endToEndId": "E2E-ZELLE-20250315-0003",
+      "createDateTime": "2025-03-15T14:30:00.000Z",
+      "paymentStatus": "PENDING",
+      "paymentStatusDetail": "Recipient email alex.chen@example.com is not enrolled in Zelle. Invitation sent. Payment will auto-complete if recipient enrolls within 14 days.",
+      "paymentExpiryDate": "2025-03-29",
+      "paymentAmount": 200.00,
+      "recipientEnrollmentStatus": "NOT_ENROLLED",
+      "notificationSent": true,
+      "notificationChannel": "EMAIL"
+    }
+  },
+
+  "flattened": {
+    "network": "Zelle",
+    "message_type": "Payment Send",
+    "payment_id": "ZEL20250315JPMC000078901",
+    "end_to_end_id": "E2E-ZELLE-20250315-0001",
+    "created_at": "2025-03-15T14:23:45.521Z",
+    "amount": 425.00,
+    "currency": "USD",
+    "memo": "March rent split — apartment utilities",
+    "status": "COMPLETED",
+    "settlement_type": "Near-instant (sub-3-minute via ACH or internal transfer)",
+
+    "sender": {
+      "name": "Sarah J. Williams",
+      "account_number": "9988776655443322",
+      "bank_bic": "CHASUS33"
+    },
+
+    "recipient": {
+      "name": "Marcus T. Rivera",
+      "zelle_token": "marcus.rivera@gmail.com",
+      "token_type": "EMAIL",
+      "enrollment_status": "ENROLLED"
+    },
+
+    "network_ids": {
+      "zelle_network_transaction_id": "ZNT20250315ABCDEF123456",
+      "firm_root_id": "FROOTJPMC20250315001"
+    },
+
+    "status_values": {
+      "COMPLETED": "Funds credited to recipient — non-reversible",
+      "PENDING": "Recipient not enrolled — awaiting enrollment up to 14 days",
+      "REJECTED": "Payment rejected — see exceptions.errorCode"
+    }
+  }
+}

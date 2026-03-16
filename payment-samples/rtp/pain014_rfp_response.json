@@ -1,0 +1,94 @@
+{
+  "_metadata": {
+    "network": "RTP (The Clearing House)",
+    "message_type": "pain.014.001.06",
+    "description": "Creditor Payment Activation Request Status Report — debtor bank responds to an RfP",
+    "schema_version": "ISO 20022 pain.014.001.06"
+  },
+
+  "iso20022_acceptance": {
+    "AppHdr": {
+      "Fr": { "FIId": { "FinInstnId": { "ClrSysMmbId": { "MmbId": "026009593" }, "Nm": "Citibank, N.A." } } },
+      "To": { "FIId": { "FinInstnId": { "ClrSysMmbId": { "MmbId": "122000247" }, "Nm": "Wells Fargo Bank, N.A." } } },
+      "BizMsgIdr": "20250315CITI0000RFP002",
+      "MsgDefIdr": "pain.014.001.06",
+      "CreDtTm": "2025-03-15T08:34:17.000Z"
+    },
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pain.014.001.06",
+      "CdtrPmtActvtnReqStsRpt": {
+        "GrpHdr": {
+          "MsgId": "RTPRFPSTS20250315CITI0001",
+          "CreDtTm": "2025-03-15T08:34:17.000Z",
+          "InitgPty": { "Nm": "Citibank, N.A." }
+        },
+        "OrgnlGrpInfAndSts": {
+          "OrgnlMsgId": "RTPRFP20250314WFB0000001",
+          "OrgnlMsgNmId": "pain.013.001.06",
+          "GrpSts": "ACCP"
+        },
+        "OrgnlPmtInfAndSts": {
+          "OrgnlPmtInfId": "RTPRFP20250314WFB0000001PMT",
+          "PmtInfSts": "ACCP",
+          "TxInfAndSts": {
+            "StsId": "RTPRFPSTS20250315CITI00001",
+            "OrgnlInstrId": "WFB20250314RFP0000001",
+            "OrgnlEndToEndId": "E2E-RFP-PCCONSULT-20250315",
+            "OrgnlUETR": "c2d3e4f5-a6b7-8c9d-0e1f-2a3b4c5d6e7f",
+            "TxSts": "ACCP",
+            "AccptncDtTm": "2025-03-15T08:34:15.222Z",
+            "StsRsnInf": {
+              "AddtlInf": "Approved by customer. pacs.008 credit transfer to follow immediately."
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "iso20022_rejection": {
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pain.014.001.06",
+      "CdtrPmtActvtnReqStsRpt": {
+        "GrpHdr": { "MsgId": "RTPRFPSTS20250315CITI0002", "CreDtTm": "2025-03-15T08:35:00.000Z" },
+        "OrgnlGrpInfAndSts": {
+          "OrgnlMsgId": "RTPRFP20250314WFB0000001",
+          "OrgnlMsgNmId": "pain.013.001.06",
+          "GrpSts": "RJCT"
+        },
+        "OrgnlPmtInfAndSts": {
+          "OrgnlPmtInfId": "RTPRFP20250314WFB0000001PMT",
+          "PmtInfSts": "RJCT",
+          "TxInfAndSts": {
+            "StsId": "RTPRFPSTS20250315CITI00002",
+            "OrgnlEndToEndId": "E2E-RFP-PCCONSULT-20250315",
+            "OrgnlUETR": "c2d3e4f5-a6b7-8c9d-0e1f-2a3b4c5d6e7f",
+            "TxSts": "RJCT",
+            "StsRsnInf": {
+              "Rsn": { "Cd": "AM04" },
+              "AddtlInf": "Insufficient funds in debtor account to fulfill requested amount of USD 3850.75."
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "RTP",
+    "message_type": "RfP Response (pain.014)",
+    "acceptance": {
+      "message_id": "RTPRFPSTS20250315CITI0001",
+      "original_rfp_id": "RTPRFP20250314WFB0000001",
+      "status": "ACCP",
+      "accepted_at": "2025-03-15T08:34:15.222Z",
+      "note": "pacs.008 credit transfer will follow with same EndToEndId"
+    },
+    "rejection": {
+      "message_id": "RTPRFPSTS20250315CITI0002",
+      "status": "RJCT",
+      "reason_code": "AM04",
+      "reason": "Insufficient funds"
+    }
+  }
+}

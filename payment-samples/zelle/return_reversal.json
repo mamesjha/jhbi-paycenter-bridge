@@ -1,0 +1,160 @@
+{
+  "_metadata": {
+    "network": "Zelle (Early Warning Services)",
+    "message_type": "Cancellation / Return",
+    "description": "Zelle has NO standardised network-level reversal for COMPLETED payments. This file documents: (1) cancellation while PENDING, and (2) the out-of-band dispute/return process.",
+    "critical_note": "COMPLETED Zelle payments are FINAL and IRREVOCABLE at the network level. Zelle does not support pacs.004-style returns. This is one of the most significant operational differences from FedNow and RTP.",
+    "options_for_recovery": {
+      "OPTION_1_CANCEL_PENDING": "If payment is still PENDING (recipient not enrolled), cancel before expiry",
+      "OPTION_2_REQUEST_RETURN": "If COMPLETED, ask recipient to voluntarily send money back (new Zelle payment from them to you)",
+      "OPTION_3_BANK_DISPUTE": "File a fraud/error claim with sending bank — handled outside Zelle via Reg E, NACHA, or bank policy",
+      "OPTION_4_CHARGEBACK": "Not applicable — Zelle is not a card network; no chargeback rights"
+    },
+    "fraud_implications": "Because COMPLETED Zelle payments cannot be reversed, they are a preferred vector for social engineering fraud (e.g., fake Zelle fraud alerts). Banks must rely on pre-payment fraud screening."
+  },
+
+  "cancellation_request": {
+    "_description": "Cancel a PENDING payment before the recipient enrolls",
+    "_endpoint": "DELETE /api/v1/payments/zelle/{paymentId}",
+    "_headers": {
+      "Authorization": "Bearer {oauth_token}",
+      "X-JP-Client-Id": "{client_id}"
+    },
+    "_path_param": {
+      "paymentId": "ZEL20250315JPMC000078902"
+    },
+    "_request_body": {
+      "cancellationReason": "CUSTOMER_REQUEST",
+      "cancellationNote": "Customer wishes to cancel pending payment before recipient enrolls."
+    }
+  },
+
+  "cancellation_response_success": {
+    "_http_status": 200,
+    "payments": {
+      "paymentId": "ZEL20250315JPMC000078902",
+      "endToEndId": "E2E-ZELLE-20250315-0003",
+      "paymentStatus": "CANCELLED",
+      "cancelledAt": "2025-03-15T16:05:33.221Z",
+      "cancellationReason": "CUSTOMER_REQUEST",
+      "refundStatus": "NOT_REQUIRED",
+      "refundNote": "Payment was in PENDING state — sender's account was not debited. No refund action required.",
+      "originalPaymentAmount": 200.00,
+      "originalPaymentCurrency": "USD"
+    }
+  },
+
+  "cancellation_response_too_late": {
+    "_http_status": 409,
+    "_note": "Attempt to cancel an already COMPLETED payment",
+    "error": {
+      "errorCode": "CANCELLATION_NOT_PERMITTED",
+      "errorDescription": "Payment ZEL20250315JPMC000078901 is in COMPLETED status and cannot be cancelled. Zelle does not support reversal of completed payments.",
+      "paymentStatus": "COMPLETED",
+      "suggestedAction": "Contact the recipient directly to request a voluntary return payment, or file a dispute with your bank if fraud is suspected.",
+      "disputePhone": "1-800-935-9935",
+      "regulatoryReference": "Regulation E (12 CFR 1005)"
+    }
+  },
+
+  "voluntary_return_request": {
+    "_description": "The only network-level 'return' for a completed Zelle payment is a NEW payment in the opposite direction — the recipient sends money back",
+    "_note": "There is no API call to request this from the network — it must be coordinated bilaterally between parties",
+    "recommended_new_payment": {
+      "payments": {
+        "requestedExecutionDate": "2025-03-16",
+        "paymentIdentifiers": {
+          "endToEndId": "E2E-ZELLE-RETURN-20250316-0001"
+        },
+        "paymentCurrency": "USD",
+        "paymentAmount": 425.00,
+        "transferType": "CREDIT",
+        "memo": "Return of E2E-ZELLE-20250315-0001 — sent in error",
+        "debtor": {
+          "debtorName": "Marcus T. Rivera",
+          "debtorAccount": {
+            "accountType": "ZELLE",
+            "alternateAccountIdentifier": "marcus.rivera@gmail.com",
+            "schemeName": { "proprietary": "EMAL" }
+          }
+        },
+        "creditor": {
+          "creditorName": "Sarah J. Williams",
+          "creditorAccount": {
+            "accountType": "ZELLE",
+            "alternateAccountIdentifier": "sarah.williams@example.com",
+            "schemeName": { "proprietary": "EMAL" }
+          }
+        }
+      }
+    }
+  },
+
+  "bank_dispute_payload": {
+    "_description": "Internal bank dispute/fraud claim filed against a completed Zelle payment",
+    "_note": "This is a bank-internal construct, not a Zelle network message. Format varies by bank.",
+    "dispute": {
+      "disputeId": "DSP20250316JPMC000001",
+      "claimType": "UNAUTHORIZED_TRANSFER",
+      "regulatoryBasis": "REGULATION_E",
+      "originalPayment": {
+        "paymentId": "ZEL20250315JPMC000078901",
+        "zelleNetworkTransactionId": "ZNT20250315ABCDEF123456",
+        "amount": 425.00,
+        "currency": "USD",
+        "completedAt": "2025-03-15T14:24:12.107Z"
+      },
+      "claimant": {
+        "customerId": "JPMC-CUS-00991234",
+        "name": "Sarah J. Williams",
+        "contactPhone": "+12125550122",
+        "contactEmail": "sarah.williams@example.com"
+      },
+      "claim": {
+        "claimDescription": "Customer states she did not authorise this payment. Her device was stolen and used to initiate the transfer.",
+        "filedAt": "2025-03-16T09:00:00.000Z",
+        "proofDocuments": ["POLICE_REPORT_2025-0316-NYC-001"],
+        "requestedResolution": "FULL_REFUND"
+      },
+      "regulatoryDeadlines": {
+        "provisionalCreditDeadline": "2025-03-26",
+        "investigationCompleteDeadline": "2025-04-15",
+        "finalResolutionDeadline": "2025-05-15"
+      },
+      "status": "UNDER_INVESTIGATION"
+    }
+  },
+
+  "flattened": {
+    "network": "Zelle",
+    "message_type": "Cancellation / Return",
+
+    "cancellation": {
+      "applies_to_status": "PENDING only",
+      "endpoint": "DELETE /api/v1/payments/zelle/{paymentId}",
+      "result": "CANCELLED — sender not charged",
+      "note": "Cannot cancel COMPLETED payments via any Zelle API"
+    },
+
+    "completed_payment_return_options": [
+      {
+        "option": "Voluntary return",
+        "mechanism": "Recipient initiates a new Zelle payment back to sender",
+        "success_rate": "Depends on recipient cooperation",
+        "timeline": "Immediate if recipient agrees"
+      },
+      {
+        "option": "Bank dispute (Reg E)",
+        "mechanism": "Sender files unauthorized transfer claim with their bank",
+        "success_rate": "Higher for documented fraud/unauthorized use",
+        "timeline": "10 business days for provisional credit; 45 days for resolution",
+        "applicable_when": "Sender's account was accessed without authorization"
+      },
+      {
+        "option": "Chargeback",
+        "applicable": false,
+        "note": "Zelle is not a card network — no chargeback rights"
+      }
+    ]
+  }
+}

@@ -1,0 +1,266 @@
+{
+  "_metadata": {
+    "network": "RTP (The Clearing House)",
+    "message_type": "pacs.008.001.07",
+    "description": "FI to FI Customer Credit Transfer via The Clearing House RTP network",
+    "schema_version": "ISO 20022 pacs.008.001.07",
+    "key_differences_from_fednow": {
+      "message_version": "RTP uses pacs.008.001.07; FedNow uses pacs.008.001.08",
+      "settlement_code": "RTP uses 'TCH' clearing code; FedNow uses 'FDN'",
+      "max_amount": "RTP limit is $1,000,000 per transaction (as of 2024); FedNow is $500,000",
+      "status_codes": "RTP also uses ACTC (AcceptedTechnicalValidation); FedNow typically does not",
+      "confirmation": "RTP requires explicit ACCP within 15 seconds; FedNow within 20 seconds",
+      "liquidity": "RTP uses prefunded position at TCH; FedNow uses Prefunded Balance at the Fed",
+      "message_wrapper": "RTP uses a proprietary message wrapper format in addition to ISO 20022 body"
+    },
+    "notes": [
+      "RTP is 24x7x365 with a 15-second end-to-end processing requirement",
+      "UETR is mandatory (UUID v4)",
+      "Account identification uses BBAN (basic bank account number) with routing + account",
+      "RTP does not support cross-border payments — USD only, US institutions only",
+      "The Clearing House assigns a unique TCH Transaction ID in addition to UETR"
+    ]
+  },
+
+  "iso20022": {
+    "AppHdr": {
+      "Fr": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": {
+              "ClrSysId": { "Cd": "USABA" },
+              "MmbId": "026009593"
+            },
+            "Nm": "Citibank, N.A."
+          }
+        }
+      },
+      "To": {
+        "FIId": {
+          "FinInstnId": {
+            "ClrSysMmbId": {
+              "ClrSysId": { "Cd": "USABA" },
+              "MmbId": "122000247"
+            },
+            "Nm": "Wells Fargo Bank, N.A."
+          }
+        }
+      },
+      "BizMsgIdr": "20250315CITI0000000555",
+      "MsgDefIdr": "pacs.008.001.07",
+      "BizSvc": "iso20022:xsd$pacs.008.001.07",
+      "CreDtTm": "2025-03-15T18:05:33.721Z",
+      "PssblDplct": false
+    },
+
+    "Document": {
+      "@xmlns": "urn:iso:std:iso:20022:tech:xsd:pacs.008.001.07",
+      "FIToFICstmrCdtTrf": {
+
+        "GrpHdr": {
+          "MsgId": "RTP20250315CITI0000000555",
+          "CreDtTm": "2025-03-15T18:05:33.721Z",
+          "NbOfTxs": "1",
+          "TtlIntrBkSttlmAmt": {
+            "@Ccy": "USD",
+            "#text": "3850.75"
+          },
+          "IntrBkSttlmDt": "2025-03-15",
+          "SttlmInf": {
+            "SttlmMtd": "CLRG",
+            "ClrSys": {
+              "Cd": "TCH"
+            }
+          },
+          "InstgAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "026009593"
+              }
+            }
+          },
+          "InstdAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "122000247"
+              }
+            }
+          }
+        },
+
+        "CdtTrfTxInf": {
+          "PmtId": {
+            "InstrId": "CITI20250315INS0000555",
+            "EndToEndId": "E2E-INVOICE-WFB-2025-0315",
+            "TxId": "RTP20250315TXN000000555",
+            "UETR": "f1e2d3c4-b5a6-7f8e-9d0c-b1a2c3d4e5f6"
+          },
+          "IntrBkSttlmAmt": {
+            "@Ccy": "USD",
+            "#text": "3850.75"
+          },
+          "IntrBkSttlmDt": "2025-03-15",
+          "InstdAmt": {
+            "@Ccy": "USD",
+            "#text": "3850.75"
+          },
+          "ChrgBr": "SLEV",
+          "PmtTpInf": {
+            "SvcLvl": { "Cd": "URGP" },
+            "LclInstrm": { "Cd": "RTP" }
+          },
+          "Dbtr": {
+            "Nm": "GlobalTech Solutions Inc",
+            "PstlAdr": {
+              "StrtNm": "399 Park Avenue",
+              "TwnNm": "New York",
+              "CtrySubDvsn": "NY",
+              "PstCd": "10022",
+              "Ctry": "US"
+            },
+            "Id": {
+              "OrgId": {
+                "AnyBIC": "GTSIUS33",
+                "Othr": {
+                  "Id": "13-4567890",
+                  "SchmeNm": { "Cd": "TXID" }
+                }
+              }
+            }
+          },
+          "DbtrAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "7654321098765432",
+                "SchmeNm": { "Cd": "BBAN" }
+              }
+            },
+            "Tp": { "Cd": "CACC" },
+            "Ccy": "USD"
+          },
+          "DbtrAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "026009593"
+              },
+              "Nm": "Citibank, N.A."
+            }
+          },
+          "CdtrAgt": {
+            "FinInstnId": {
+              "ClrSysMmbId": {
+                "ClrSysId": { "Cd": "USABA" },
+                "MmbId": "122000247"
+              },
+              "Nm": "Wells Fargo Bank, N.A."
+            }
+          },
+          "Cdtr": {
+            "Nm": "Pacific Coast Consulting LLC",
+            "PstlAdr": {
+              "StrtNm": "560 Mission Street Suite 900",
+              "TwnNm": "San Francisco",
+              "CtrySubDvsn": "CA",
+              "PstCd": "94105",
+              "Ctry": "US"
+            },
+            "Id": {
+              "OrgId": {
+                "Othr": {
+                  "Id": "94-1234567",
+                  "SchmeNm": { "Cd": "TXID" }
+                }
+              }
+            }
+          },
+          "CdtrAcct": {
+            "Id": {
+              "Othr": {
+                "Id": "1122334455667788",
+                "SchmeNm": { "Cd": "BBAN" }
+              }
+            },
+            "Tp": { "Cd": "CACC" },
+            "Ccy": "USD"
+          },
+          "Purp": {
+            "Cd": "BEXP"
+          },
+          "RmtInf": {
+            "Ustrd": "Consulting services March 2025 — Project Phoenix Phase 2 (PO-2025-0103)",
+            "Strd": {
+              "RfrdDocInf": {
+                "Tp": {
+                  "CdOrPrtry": { "Cd": "CINV" }
+                },
+                "Nb": "PCC-INV-2025-0115",
+                "RltdDt": "2025-03-01"
+              },
+              "RfrdDocAmt": {
+                "DuePyblAmt": {
+                  "@Ccy": "USD",
+                  "#text": "3850.75"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "flattened": {
+    "network": "RTP",
+    "message_type": "Credit Transfer",
+    "message_id": "RTP20250315CITI0000000555",
+    "created_at": "2025-03-15T18:05:33.721Z",
+    "settlement_date": "2025-03-15",
+    "settlement_network": "TCH",
+    "max_amount_limit_usd": 1000000,
+
+    "payment": {
+      "instruction_id": "CITI20250315INS0000555",
+      "end_to_end_id": "E2E-INVOICE-WFB-2025-0315",
+      "transaction_id": "RTP20250315TXN000000555",
+      "uetr": "f1e2d3c4-b5a6-7f8e-9d0c-b1a2c3d4e5f6",
+      "amount": 3850.75,
+      "currency": "USD",
+      "charge_bearer": "SLEV",
+      "purpose_code": "BEXP",
+      "purpose_description": "Business Expenses",
+      "remittance_info": "Consulting services March 2025 — Project Phoenix Phase 2 (PO-2025-0103)",
+      "invoice_reference": "PCC-INV-2025-0115"
+    },
+
+    "sender_bank": {
+      "name": "Citibank, N.A.",
+      "routing_number": "026009593"
+    },
+
+    "debtor": {
+      "name": "GlobalTech Solutions Inc",
+      "account_number": "7654321098765432",
+      "account_type": "CACC",
+      "tax_id": "13-4567890",
+      "city": "New York",
+      "state": "NY"
+    },
+
+    "receiver_bank": {
+      "name": "Wells Fargo Bank, N.A.",
+      "routing_number": "122000247"
+    },
+
+    "creditor": {
+      "name": "Pacific Coast Consulting LLC",
+      "account_number": "1122334455667788",
+      "account_type": "CACC",
+      "tax_id": "94-1234567",
+      "city": "San Francisco",
+      "state": "CA"
+    }
+  }
+}
