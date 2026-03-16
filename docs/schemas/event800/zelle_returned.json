@@ -1,0 +1,49 @@
+{
+  "_comment": "Example Zelle payment event payload – RETURNED status. Based on Early Warning Services (EWS) Zelle API schema. Field names to be confirmed with JH PayCenter integration team (see Appendix A).",
+  "zelleTransactionId": "ZL-20260316-2C9E77F1",
+  "ewsTransactionId": "EWS-2026031600015033",
+  "institutionTransactionId": "FI-TXN-00294012",
+  "originalZelleTransactionId": "ZL-20260314-9A1D23B4",
+  "status": "RETURNED",
+  "statusCode": "RTRN",
+  "statusDescription": "Returned",
+  "returnReasonCode": "AM09",
+  "returnReasonDescription": "WrongAmount",
+  "transactionType": "RETURN",
+  "initiatedAt": "2026-03-16T09:05:33.000Z",
+  "completedAt": "2026-03-16T09:05:35.417Z",
+  "settlementDate": "2026-03-16",
+  "amount": {
+    "value": "500.00",
+    "currency": "USD"
+  },
+  "sender": {
+    "institutionId": "FI-00456",
+    "institutionName": "Sunrise Credit Union",
+    "accountToken": "ACT-57291038",
+    "tokenType": "PHONE",
+    "tokenValue": "+1***555***0199",
+    "displayName": "Maria G.",
+    "routingNumber": "322271627"
+  },
+  "receiver": {
+    "institutionId": "FI-00123",
+    "institutionName": "First National Bank",
+    "accountToken": "ACT-83920193",
+    "tokenType": "EMAIL",
+    "tokenValue": "j***@example.com",
+    "displayName": "John S.",
+    "routingNumber": "021000021"
+  },
+  "memo": "Returned – wrong amount sent",
+  "fraudIndicators": {
+    "riskScore": 5,
+    "riskBand": "LOW",
+    "fdcFlags": []
+  },
+  "networkTimings": {
+    "submittedToEwsAt": "2026-03-16T09:05:33.200Z",
+    "ewsAcknowledgedAt": "2026-03-16T09:05:34.001Z",
+    "settledAt": "2026-03-16T09:05:35.417Z"
+  }
+}

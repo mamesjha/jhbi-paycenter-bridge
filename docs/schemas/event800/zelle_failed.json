@@ -1,0 +1,48 @@
+{
+  "_comment": "Example Zelle payment event payload – FAILED status. Based on Early Warning Services (EWS) Zelle API schema. Field names to be confirmed with JH PayCenter integration team (see Appendix A).",
+  "zelleTransactionId": "ZL-20260316-5D2B04A7",
+  "ewsTransactionId": "EWS-2026031600014901",
+  "institutionTransactionId": "FI-TXN-00293901",
+  "status": "FAILED",
+  "statusCode": "RJCT",
+  "statusDescription": "Rejected",
+  "returnReasonCode": "AC04",
+  "returnReasonDescription": "ClosedAccountNumber",
+  "transactionType": "SEND",
+  "initiatedAt": "2026-03-16T15:10:11.002Z",
+  "completedAt": "2026-03-16T15:10:12.519Z",
+  "settlementDate": null,
+  "amount": {
+    "value": "75.00",
+    "currency": "USD"
+  },
+  "sender": {
+    "institutionId": "FI-00123",
+    "institutionName": "First National Bank",
+    "accountToken": "ACT-83920193",
+    "tokenType": "EMAIL",
+    "tokenValue": "j***@example.com",
+    "displayName": "John S.",
+    "routingNumber": "021000021"
+  },
+  "receiver": {
+    "institutionId": "FI-00789",
+    "institutionName": "Metro Bank",
+    "accountToken": "ACT-11203847",
+    "tokenType": "PHONE",
+    "tokenValue": "+1***555***0344",
+    "displayName": "Carlos R.",
+    "routingNumber": "026009593"
+  },
+  "memo": "Rent split",
+  "fraudIndicators": {
+    "riskScore": 8,
+    "riskBand": "LOW",
+    "fdcFlags": []
+  },
+  "networkTimings": {
+    "submittedToEwsAt": "2026-03-16T15:10:11.210Z",
+    "ewsAcknowledgedAt": "2026-03-16T15:10:11.988Z",
+    "settledAt": null
+  }
+}

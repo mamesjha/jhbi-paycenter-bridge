@@ -1,0 +1,46 @@
+{
+  "_comment": "Example Zelle payment event payload – COMPLETED status. Based on Early Warning Services (EWS) Zelle API schema. Field names to be confirmed with JH PayCenter integration team (see Appendix A).",
+  "zelleTransactionId": "ZL-20260316-8A3F91C2",
+  "ewsTransactionId": "EWS-2026031600014872",
+  "institutionTransactionId": "FI-TXN-00293847",
+  "status": "COMPLETED",
+  "statusCode": "ACCC",
+  "statusDescription": "AcceptedSettlementCompleted",
+  "transactionType": "SEND",
+  "initiatedAt": "2026-03-16T14:22:05.123Z",
+  "completedAt": "2026-03-16T14:22:07.841Z",
+  "settlementDate": "2026-03-16",
+  "amount": {
+    "value": "250.00",
+    "currency": "USD"
+  },
+  "sender": {
+    "institutionId": "FI-00123",
+    "institutionName": "First National Bank",
+    "accountToken": "ACT-83920193",
+    "tokenType": "EMAIL",
+    "tokenValue": "j***@example.com",
+    "displayName": "John S.",
+    "routingNumber": "021000021"
+  },
+  "receiver": {
+    "institutionId": "FI-00456",
+    "institutionName": "Sunrise Credit Union",
+    "accountToken": "ACT-57291038",
+    "tokenType": "PHONE",
+    "tokenValue": "+1***555***0199",
+    "displayName": "Maria G.",
+    "routingNumber": "322271627"
+  },
+  "memo": "Dinner last night",
+  "fraudIndicators": {
+    "riskScore": 12,
+    "riskBand": "LOW",
+    "fdcFlags": []
+  },
+  "networkTimings": {
+    "submittedToEwsAt": "2026-03-16T14:22:05.310Z",
+    "ewsAcknowledgedAt": "2026-03-16T14:22:06.002Z",
+    "settledAt": "2026-03-16T14:22:07.841Z"
+  }
+}
